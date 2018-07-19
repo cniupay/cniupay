@@ -6,7 +6,9 @@ package com.zhuzhuodong.tool.android.mmpay.common;
 
 public interface CommonUrl {
 
-    String DOMAIN = "";
-    String PREPAY = DOMAIN + "/api/app/pay/prepay";
+    String DOMAIN = "http://pay.wokanzhong.cn/";
+    //String DOMAIN = "http://172.19.116.45:9801/";
+    String PREPAY = DOMAIN + "api/app/pay/prepay";
+    String QUERY = DOMAIN + "api/app/pay/query";
 
 }
