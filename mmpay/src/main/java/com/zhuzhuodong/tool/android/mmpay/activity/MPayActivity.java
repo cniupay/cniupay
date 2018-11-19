@@ -29,6 +29,7 @@ import com.zhuzhuodong.tool.android.mmpay.common.CommonResp;
 import com.zhuzhuodong.tool.android.mmpay.common.CommonUrl;
 import com.zhuzhuodong.tool.android.mmpay.common.PrepayResult;
 import com.zhuzhuodong.tool.android.mmpay.dialog.MmPayConfirmDialog;
+import com.zhuzhuodong.tool.android.mmpay.dialog.MmPayLoadingDialog;
 import com.zhuzhuodong.tool.android.mmpay.enums.MmPayResultCodeEnum;
 import com.zhuzhuodong.tool.android.mmpay.util.GsonUtil;
 
@@ -58,6 +59,7 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
     private String outTradeNo;
     private RelativeLayout mmpayConfirmLayout;
     private String tradeNo;
+    private MmPayLoadingDialog dialog;
 
     private Handler mmpayHandler = new Handler() {
         @Override
@@ -130,12 +132,14 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
         mpaySubject.setText(title);
         mmpayConfirmLayout = (RelativeLayout) findViewById(R.id.mmpayConfirmLayout);
         mmpayConfirmLayout.setOnClickListener(this);
+        dialog = new MmPayLoadingDialog(context);
     }
 
     @Override
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.mmpayConfirmLayout) {
+            dialog.show();
             if (amount <= 0) {
                 Toast.makeText(context, "金额非法，请联系开发者处理", Toast.LENGTH_SHORT).show();
                 return;
@@ -161,6 +165,7 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 PayTask payTask = new PayTask((Activity) context);
                 CommonResp resp = getOrderInfo(amount, title, MmPay.getAppId());
+                dialog.dismiss();
                 if (null == resp || !resp.getCode().equals(0)) {
                     Message message = new Message();
                     message.what = 2;
@@ -278,7 +283,7 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
         CommonResp resp = null;
         HttpURLConnection connection = null;
         try {
-            URL url = new URL(CommonUrl.PREPAY);
+            URL url = new URL(CommonUrl.PREPAY_ALIPAY);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
