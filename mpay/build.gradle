@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 27
@@ -37,20 +36,14 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-ext {
-    PUBLISH_GROUP_ID = 'com.cniupay'
-    PUBLISH_ARTIFACT_ID = 'cniupay'
-    PUBLISH_VERSION = '1.0'
-}
-
-//apply from: 'deploy.gradle.bak'
+apply from: 'maven_build.gradle'
 
 
-publish {
+/*publish {
     userOrg = 'xici'//bintray.com用户名
     groupId = 'com.cniupay'//jcenter上的路径
     artifactId = 'cniupay'//项目名称
     publishVersion = '1.0.1'//版本号
     desc = '丑牛支付'//描述，不重要
     website = 'http://cniupay.com'//网站，最好有，不重要
-}
+}*/
