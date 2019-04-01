@@ -163,7 +163,7 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 PayTask payTask = new PayTask((Activity) context);
-                CommonResp resp = getOrderInfo(amount, title, CNiuPay.getAppKey());
+                CommonResp resp = getOrderInfo(amount, title, CNiuPay.getSecretAppKey());
                 dialog.dismiss();
                 if (null == resp || !resp.getCode().equals(0)) {
                     Message message = new Message();
@@ -235,7 +235,7 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
             connection.connect();
             DataOutputStream out = new DataOutputStream(connection.getOutputStream());
             StringBuilder builder = new StringBuilder();
-            builder.append("appId=").append(URLEncoder.encode(CNiuPay.getAppKey(), "utf-8")).append("&");
+            builder.append("appId=").append(URLEncoder.encode(CNiuPay.getSecretAppKey(), "utf-8")).append("&");
             builder.append("tradeNo=").append(URLEncoder.encode(tradeNo, "utf-8"));
             out.writeBytes(builder.toString());
             out.flush();
@@ -295,7 +295,7 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
             connection.connect();
             DataOutputStream out = new DataOutputStream(connection.getOutputStream());
             StringBuilder builder = new StringBuilder();
-            builder.append("appKey=").append(URLEncoder.encode(CNiuPay.getAppKey(), "utf-8")).append("&");
+            builder.append("appKey=").append(URLEncoder.encode(CNiuPay.getSecretAppKey(), "utf-8")).append("&");
             builder.append("amount=").append(URLEncoder.encode(String.valueOf(amount),
                     "utf-8")).append("&");
             if (null != title) {
