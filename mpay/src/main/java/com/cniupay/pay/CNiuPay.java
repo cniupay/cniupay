@@ -26,7 +26,7 @@ public class CNiuPay {
     private static CNiuPay INSTANCE = null;
 
     private static Context context;
-    private static String appKey;
+    private static String APP_KEY;
     private static PayResultListener listener;
 
     private CNiuPay(Context context) {
@@ -44,7 +44,7 @@ public class CNiuPay {
     }
 
     private static void report() {
-        if (null == context || null == appKey) {
+        if (null == context || null == APP_KEY) {
             return;
         }
         new Thread(new Runnable() {
@@ -61,14 +61,14 @@ public class CNiuPay {
                     connection.connect();
                     DataOutputStream out = new DataOutputStream(connection.getOutputStream());
                     StringBuilder builder = new StringBuilder();
-                    builder.append("appKey=").append(URLEncoder.encode(appKey, "utf-8")).append("&");
+                    builder.append("appKey=").append(URLEncoder.encode(APP_KEY, "utf-8")).append("&");
                     builder.append("appId=").append(URLEncoder.encode(context.getPackageName(),
                             "utf-8"));
                     out.writeBytes(builder.toString());
                     out.flush();
                     out.close();
-                    int temp=connection.getResponseCode();
-                    int bbb=temp;
+                    int temp = connection.getResponseCode();
+                    int bbb = temp;
                 } catch (Exception e) {
                     Log.e(TAG, "report: ", e);
                 } finally {
@@ -81,7 +81,7 @@ public class CNiuPay {
     }
 
     public void init(String appKey) {
-        CNiuPay.appKey = appKey;
+        CNiuPay.APP_KEY = appKey;
         report();
     }
 
@@ -101,7 +101,7 @@ public class CNiuPay {
     }
 
     public static String getAppKey() {
-        return appKey;
+        return APP_KEY;
     }
 
     public static void doFinished(PayResultCodeEnum resultCode, String resultMsg, long amount) {
