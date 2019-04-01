@@ -1,0 +1,7 @@
+siteUrl = http://cniupay.com
+gitUrl = <>
+version = 1.0.1
+groupId = com.cniupay
+licenses = ['GPL-3.0'] // or something else
+id = cniupay
+name = <cniupay> // actually not used

@@ -9,9 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.zhuzhuodong.tool.android.mmpay.MmPay;
-import com.zhuzhuodong.tool.android.mmpay.enums.MmPayResultCodeEnum;
-import com.zhuzhuodong.tool.android.mmpay.listener.PayResultListener;
+import com.cniupay.pay.CNiuPay;
+import com.cniupay.pay.enums.PayResultCodeEnum;
+import com.cniupay.pay.listener.PayResultListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(context, "金额必须大于0", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                MmPay.getInstance(context).pay(amountValue, subjectStr, null, new PayResultListener() {
+                CNiuPay.getInstance(context).pay(amountValue, subjectStr, null, new PayResultListener() {
                     @Override
-                    public void onPayFinished(MmPayResultCodeEnum payResult,
+                    public void onPayFinished(Context context, PayResultCodeEnum payResult,
                                               String resultMsg, long amount) {
                         Toast.makeText(context, "Final:" + payResult.getCode(), Toast.LENGTH_LONG).show();
                     }

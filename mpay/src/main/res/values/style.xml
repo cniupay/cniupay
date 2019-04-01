@@ -1,0 +1,11 @@
+<resources>
+
+
+    <style name="CniuTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <style name="CniuTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="CniuTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>
