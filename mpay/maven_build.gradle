@@ -4,7 +4,7 @@ ext {
     GITHUB_REPO_PATH='/Users/zhuzhuodong/develop/android/cniupay'
     PUBLISH_GROUP_ID = 'com.cniupay'// 包名
     PUBLISH_ARTIFACT_ID = 'cniupay'// 组件名
-    PUBLISH_VERSION = '1.0.1'// 版本号
+    PUBLISH_VERSION = '1.0.2'// 版本号
 }
 
 uploadArchives {
