@@ -95,6 +95,7 @@ public class CNiuPay {
         intent.putExtra("amount", amount);
         intent.putExtra("title", tradeName);
         intent.putExtra("outTradeNo", outTradeNo);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         return;
 
