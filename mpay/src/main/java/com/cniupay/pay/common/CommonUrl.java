@@ -8,7 +8,7 @@ public interface CommonUrl {
 
     String DOMAIN = "http://cniupay.com/";
     String PREPAY_ALIPAY = DOMAIN + "api/app/pay/prepay/alipay";
-    String QUERY = DOMAIN + "api/app/pay/query";
+    String QUERY = DOMAIN + "api/pay/query";
     String REPORT_DEVICE = DOMAIN + "api/report/device";
 
 }

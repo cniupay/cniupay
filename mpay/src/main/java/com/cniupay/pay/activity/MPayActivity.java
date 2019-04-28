@@ -24,11 +24,14 @@ import com.alipay.sdk.app.PayTask;
 import com.cniupay.pay.CNiuPay;
 import com.cniupay.pay.common.CommonResp;
 import com.cniupay.pay.common.CommonUrl;
+import com.cniupay.pay.common.PayResult;
 import com.cniupay.pay.common.PrepayResult;
 import com.cniupay.pay.dialog.MmPayConfirmDialog;
 import com.cniupay.pay.dialog.MmPayLoadingDialog;
 import com.cniupay.pay.enums.PayResultCodeEnum;
+import com.cniupay.pay.enums.PayTypeEnum;
 import com.cniupay.pay.util.GsonUtil;
+import com.google.gson.JsonObject;
 import com.zhuzhuodong.tool.android.mmpay.R;
 
 import java.io.BufferedReader;
@@ -38,13 +41,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MPayActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MPayActivity";
 
-    private static DecimalFormat AMOUNT_FORMAT = new DecimalFormat("#.##");
+    private static DecimalFormat AMOUNT_FORMAT = new DecimalFormat("0.00");
 
     private Context context;
     private Activity activity;
@@ -67,11 +71,11 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
             switch (msg.what) {
                 case 0:
                     activity.finish();
-                    CNiuPay.doFinished(PayResultCodeEnum.SUCCESS, "Success", amount);
+                    CNiuPay.doFinished(PayResultCodeEnum.SUCCESS, "Success", (PayResult) msg.obj);
                     break;
                 case 1:
                     activity.finish();
-                    CNiuPay.doFinished(PayResultCodeEnum.FAILURE, "Failure", amount);
+                    CNiuPay.doFinished(PayResultCodeEnum.FAILURE, "Failure", null);
                     break;
                 case 2:
                     Toast.makeText(context, null != msg.obj ? msg.obj.toString() : "系统异常，请重试",
@@ -181,7 +185,15 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i(TAG, "pay result: " + result);
                 Integer resultStatus = Integer.valueOf(result.get("resultStatus"));
                 if (null != resultStatus && resultStatus.equals(9000)) {
-                    sendSuccess();
+                    JsonObject resultTemp = GsonUtil.GSON.fromJson(result.get("result"), JsonObject.class);
+                    JsonObject resultData = resultTemp.getAsJsonObject("alipay_trade_app_pay_response");
+                    PayResult resultVo = new PayResult();
+                    resultVo.setTradeNo(tradeNo);
+                    resultVo.setAmount((long) (resultData.get("total_amount").getAsDouble() * 100));
+                    resultVo.setRealTradeNo(resultData.get("trade_no").getAsString());
+                    resultVo.setStatus(1);
+                    resultVo.setPayType(PayTypeEnum.ZHIFUBAO.getCode());
+                    sendSuccess(resultVo);
                 } else {
                     Message message = new Message();
                     message.what = 3;
@@ -235,7 +247,7 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
             connection.connect();
             DataOutputStream out = new DataOutputStream(connection.getOutputStream());
             StringBuilder builder = new StringBuilder();
-            builder.append("appId=").append(URLEncoder.encode(CNiuPay.getSecretAppKey(), "utf-8")).append("&");
+            builder.append("appKey=").append(URLEncoder.encode(CNiuPay.getSecretAppKey(), "utf-8")).append("&");
             builder.append("tradeNo=").append(URLEncoder.encode(tradeNo, "utf-8"));
             out.writeBytes(builder.toString());
             out.flush();
@@ -261,17 +273,32 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
                 connection.disconnect();
             }
         }
-        if (null != resp && "0".equals(resp.getData())) {
-            sendSuccess();
+        if (null != resp && 0 == resp.getCode()) {
+            if (null == resp.getData()) {
+                sendFailre();
+                return;
+            }
+            try {
+                PayResult result = GsonUtil.GSON.fromJson(resp.getData(), PayResult.class);
+                if (result.getStatus() == 1) {
+                    sendSuccess(result);
+                } else {
+                    sendFailre();
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "queryPay: ", e);
+                sendFailre();
+            }
         } else {
             sendFailre();
         }
 
     }
 
-    private void sendSuccess() {
+    private void sendSuccess(PayResult result) {
         Message message = new Message();
         message.what = 0;
+        message.obj = result;
         mmpayHandler.sendMessage(message);
     }
 

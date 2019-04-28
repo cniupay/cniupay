@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.cniupay.pay.activity.MPayActivity;
 import com.cniupay.pay.common.CommonUrl;
+import com.cniupay.pay.common.PayResult;
 import com.cniupay.pay.enums.PayResultCodeEnum;
 import com.cniupay.pay.listener.PayResultListener;
 
@@ -105,9 +106,9 @@ public class CNiuPay {
         return SECRET_APP_KEY;
     }
 
-    public static void doFinished(PayResultCodeEnum resultCode, String resultMsg, long amount) {
+    public static void doFinished(PayResultCodeEnum resultCode, String resultMsg, PayResult result) {
         if (null != listener) {
-            listener.onPayFinished(context, resultCode, resultMsg, amount);
+            listener.onPayFinished(context, resultCode, resultMsg, result);
         }
     }
 

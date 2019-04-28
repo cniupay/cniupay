@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cniupay.pay.CNiuPay;
+import com.cniupay.pay.common.PayResult;
 import com.cniupay.pay.enums.PayResultCodeEnum;
 import com.cniupay.pay.listener.PayResultListener;
 
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 CNiuPay.getInstance(context).pay(amountValue, subjectStr, null, new PayResultListener() {
                     @Override
                     public void onPayFinished(Context context, PayResultCodeEnum payResult,
-                                              String resultMsg, long amount) {
+                                              String resultMsg, PayResult data) {
                         Toast.makeText(context, "Final:" + payResult.getCode(), Toast.LENGTH_LONG).show();
                     }
                 });
