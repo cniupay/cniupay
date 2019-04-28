@@ -193,6 +193,7 @@ public class MPayActivity extends AppCompatActivity implements View.OnClickListe
                     resultVo.setRealTradeNo(resultData.get("trade_no").getAsString());
                     resultVo.setStatus(1);
                     resultVo.setPayType(PayTypeEnum.ZHIFUBAO.getCode());
+                    resultVo.setOutTradeNo(outTradeNo);
                     sendSuccess(resultVo);
                 } else {
                     Message message = new Message();

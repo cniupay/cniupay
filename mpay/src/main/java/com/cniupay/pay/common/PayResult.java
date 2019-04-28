@@ -5,8 +5,17 @@ public class PayResult {
     private String tradeNo;
     private Integer payType;
     private String realTradeNo;
+    private String outTradeNo;
     private Integer status;
     private Long amount;
+
+    public String getOutTradeNo() {
+        return outTradeNo;
+    }
+
+    public void setOutTradeNo(String outTradeNo) {
+        this.outTradeNo = outTradeNo;
+    }
 
     public String getTradeNo() {
         return tradeNo;
